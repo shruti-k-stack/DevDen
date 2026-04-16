@@ -1,0 +1,27 @@
+{
+  "name": "devden",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "nodejs",
+    "javascript"
+  ],
+  "homepage": "https://github.com/shruti-k-stack/DevDen#readme",
+  "bugs": {
+    "url": "https://github.com/shruti-k-stack/DevDen/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shruti-k-stack/DevDen.git"
+  },
+  "license": "ISC",
+  "author": "Shruti K",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
