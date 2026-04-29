@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 // eslint-disable-next-line no-unused-vars
 const validator = require('validator');
 const bcrypt = require('bcrypt');
-const { jwt } = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
     firstName: {
