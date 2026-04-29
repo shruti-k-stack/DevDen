@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const process = require('process');
 const User = require('../models/user');
 
 const userAuth = async (req, res, next) => {
@@ -8,7 +9,7 @@ const userAuth = async (req, res, next) => {
             res.status(401).send('Unauthorized');
             return;
         }
-        const decodedMsg = jwt.verify(token, "DevDen@$#456");
+        const decodedMsg = jwt.verify(token, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
         const { _id } = decodedMsg;
         const user = await User.findById(_id);
         if (user) {
