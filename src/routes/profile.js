@@ -1,0 +1,39 @@
+const express = require('express');
+const { userAuth } = require('../middlewares/auth');
+const { validateProfileUpdateData } = require('../utils/validation');
+
+const profileRouter = express.Router();
+
+profileRouter.get('/profile', userAuth, async (req, res) => {
+    try{
+    const user = req.user; // The user object is attached to the request by the auth middleware
+    console.log(user);
+    res.send(user);
+} catch (err) {
+    res.status(400).send(`Something went wrong: ${err.message}`);
+}
+});
+
+profileRouter.patch('/profile/edit', userAuth, async (req, res) => {
+    try {
+       if(!validateProfileUpdateData(req)) {
+        throw new Error("Invalid data for profile update");
+       }
+       
+    const loggedInUser = req.user; // The user object is attached to the request by the auth middleware
+
+    Object.keys(req.body).forEach((key) => {
+        loggedInUser[key] = req.body[key];
+    })
+
+    await loggedInUser.save();
+
+    res.send(`${loggedInUser.firstName}, your profile updated successfully`);
+    console.log(loggedInUser);
+
+} catch (err) {
+    res.status(400).send(`Something went wrong: ${err.message}`);
+}
+});
+
+module.exports = profileRouter;

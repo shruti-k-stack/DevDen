@@ -1,19 +1,26 @@
 const express = require('express');
 const connectDB = require('./config/database');
-const User = require('./models/user');
+const cookieParser = require('cookie-parser');
+const process = require('process');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(cookieParser());
 
-app.post('/signup', async (req, res) => {
-    const userObj = new User(req.body);
+const authRouter = require('./routes/auth');
+const profileRouter = require('./routes/profile');
+const requestRouter = require('./routes/request');
 
-    await userObj.save();
-    res.send('User created successfully');
+app.use('/', authRouter);
+app.use('/', profileRouter);
+app.use('/', requestRouter);
 
-})
+
+
+
 
     
 connectDB().then(() => {

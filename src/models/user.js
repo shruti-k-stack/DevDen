@@ -1,14 +1,21 @@
-const e = require('express');
 const mongoose = require('mongoose');
+// eslint-disable-next-line no-unused-vars
+const validator = require('validator');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const process = require('process');
 
 const userSchema = new mongoose.Schema({
     firstName: {
         type: String,
-        required: true
+        required: true,
+        minlength: 3,
+        maxlength: 30
     },
     lastName: {
         type: String,
-        required: true
+        required: true,
+        maxlength: 30
     },
     email: {
         type: String,
@@ -16,17 +23,41 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: 8
     },
     age: {
         type: Number,
-        required: true
+        required: true,
+        min: 18
     },
     gender: {
         type: String,
-        required: true
+        required: true,
+        validate(value) {
+            if (![ 'male', 'female', 'other' ].includes(value)) {
+                throw new Error("Gender must be either male, female, or other");
+            }
+        }
     },
+},
+{    timestamps: true
 });
+
+userSchema.methods.getJwt = async function() {
+    const user = this;
+
+    const token = await jwt.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+    return token;
+};
+
+userSchema.methods.validatePassword = async function(passwordInputByUser) {
+    const user = this;
+
+    const passwordHash = user.password;
+    const isPasswordValid = await bcrypt.compare(passwordInputByUser, passwordHash);
+    return isPasswordValid;
+}
 
 const User = mongoose.model('User', userSchema);
 
