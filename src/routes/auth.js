@@ -26,7 +26,7 @@ authRouter.post('/signup', async (req, res) => {
 
     res.send('User created successfully');
 
-})
+});
 
 authRouter.post ('/login', async(req, res) => {
     try {
@@ -54,6 +54,11 @@ authRouter.post ('/login', async(req, res) => {
         }catch (err) {
             res.status(400).send(err.message);
         }
-})
+});
+
+authRouter.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.send('Logout successful');
+});
 
 module.exports = authRouter;
